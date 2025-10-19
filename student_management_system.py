@@ -1,202 +1,323 @@
-student_db={101:{'name':'vaibhav patil','course':'data science','total_fees':400000,'paid_fees':30000,'remaining_fees':10000}}
-course_fees={'data science':40000,'web developement':300000,'aws':15000,'C++':25000,'Java Development':20000}
+# DATABASES
+student_db = {
+    101: {'name': 'vaibhav patil', 'course': 'data science', 'total_fees': 40000, 'paid_fees': 30000, 'remaining_fees': 10000}
+}
+course_fees = {'data science': 40000, 'web development': 30000, 'aws': 15000, 'C++': 25000, 'Java Development': 20000}
+users = {'Admin': 'admin123', 'Vaibhav Patil': 'vaibhav123', 'Shravani Welzile': 'shravani123'}
 
-print("Shravani's Academy".center(100,'-'))
-
+# USER LOGIN
 while True:
-    print('''
-    1.Add Student Data
-    2.Diplay Student data
-    3.Update Student Data
-    4.Delete Student Data
-    5.Filter Student Data  
-    6.LogOut                                                                 
-
-    ''')
-
-    ch=int(input("Enter your choice: "))
-    if ch==1:
-        name=input("Name: ")
-        courses=list(course_fees.keys())
-
-        print("<= Available Courses => ".center(50))
-
-        sr=1
-        for course in courses:
-            print(f'{sr}.{course}')
-            sr=sr+1
-
-        ch=int(input("Select your Course: ")) 
-        index=ch-1
-
-        course=courses[index]
-        print(course)
-
-        #accessing fees from course name in dict
-        fees=course_fees[course]
-        print(f"fees for course {course} is {fees}")
-        
-        #discount
-        dis=eval(input("Enter Discount Percetage: "))
-        tfees=fees-fees*dis/100
-        print(f'fees after {dis}% discount is {tfees}')
-
-        pfees=eval(input("Enter Fees to be paid now: "))
-        rfees=tfees-pfees
-
-        print(f" Total Fees(after discount) : {tfees} \n Paid Fees: {pfees} \n Remaining Fees: {rfees}")
-
-        #adding values to db (student_db ) dict
-        #var[key]=value
-
-        reg=len(student_db)+101
-        student_db[reg]={'name':name,'course':course,'total_fees':tfees,'paid_fees':pfees,'remaining_fees':rfees}
-        print("Data Addded to Database Successfully !!!")
-
-        #print(student_db)
-
-
-
-        #Add student data
-    elif ch==2:
-        print("-"*135)
-        print(f'|{'Reg No':^20} | {'Student Name':^20}| {'Course Name':^20} | {'Total Fees':^20}| {'Paid Fees':^20}| {'Remaining Fees':^20}|')
-        print("-"*135)    
-
-        for reg in student_db:
-             print(f'|{reg:^20} | {student_db[reg]['name']:^20}| {student_db[reg]['course']:^20} | {student_db[reg]['total_fees']:^20}| {student_db[reg]['paid_fees']:^20}| {student_db[reg]['remaining_fees']:^20}|')
-             print("-"*135)   
-
-        #Display 
-    elif ch==3:
-        #update
-        cont=True
-        while cont:
-            reg=int(input("Enter registraion number: "))
-            if reg in student_db:
-                cont=False
-
-        
-        print('''
-            1.Name
-            2.Fees
-            3.Change Course   
-                ''')
-        ch=int(input("Enter your choice: "))
-        if ch==1:
-            #name
-            uname=input('Name: ')
-            #var[key]=uvalue
-            student_db[reg]['name']=uname
-            print(" Name Updated Successfully !")
-
-        elif ch==2:
-            #Fees
-            print(f'Course Name:{student_db[reg]['course']}\nTotal Fees:{student_db[reg]['total_fees']}\nPaid fees:{student_db[reg]['paid_fees']}\nRemaining Fees:{student_db[reg]['remaining_fees']}\n ')
-            fees=eval(input("Enter Amount: "))
-             #var[key]=uvalue
-            
-            student_db[reg]['paid_fees']+=fees
-            student_db[reg]['remaining_fees']-=fees
-            print("Thank You ! ")
-
-
-        elif ch==3:
-            #course updation 
-            '''display
-            '''
-            print("============ Current Course Details ============ ")
-            print(f'Course Name:{student_db[reg]['course']}\nTotal Fees:{student_db[reg]['total_fees']}\nPaid fees:{student_db[reg]['paid_fees']}\nRemaining Fees:{student_db[reg]['remaining_fees']}\n ')
-            
-         
-            courses=list(course_fees.keys())
-            print("================================================")
-            print("<= Available Courses => ".center(50))
-            sr=1
-            for course in courses:
-                print(f'{sr}.{course}')
-                sr=sr+1
-
-            print("============================")
-
-            while True:
-                ch_course_select=int(input("Select new course: "))
-                if 1<= ch_course_select <=len(courses):
-                    index=ch_course_select-1
-                    new_course=courses[index]
-                    break
-                else:
-                    print("Invalid Course number, Please Select Valid Number ")
-        
-            print(f'New Course Selected : {new_course}')
-
-    
-            #Fees Calculation for new course
-            current_pfees=student_db[reg]['paid_fees']
-            new_tfees=course_fees[new_course]   #without discount
-
-            print(f'Total Fees for New Course {new_course} (*without discount*) is {new_tfees}')
-
-            fees_diff=current_pfees-new_tfees
-
-            if fees_diff>=0:
-                refund=fees_diff
-                new_pfees=new_tfees
-                new_rfees=0
-                print(f"\n Your already paid fees {current_pfees} covers new course {new_course}'s fees {new_tfees}")
-                if refund>0:
-                    print(f"***Refund Amount : {refund} ***")
-
-            else:
-                new_pfees=current_pfees
-                new_rfees=abs(fees_diff)
-                print(f"\n Your already paid fees {current_pfees} is less than new course {new_course}'s fees({new_tfees})")
-                print(f"Remaining amount to be paid : {new_rfees}")
-
-            
-        else:
-            print("Invalid input !!!")
-
-
-
-    elif ch==4:
-        #delete
-        while True:
-            reg=int(input("Enter Registration Number: "))
-            if reg in student_db:
-                break
-
-        n=student_db[reg]['name']
-        student_db.pop(reg)
-        print(f"{n}'s data is deleted Successfully !")
-
-
-
-    elif ch==5:
-        #filter
-        print('''
-            1.Course
-            2.Remaining Fees
-            ''')
-        ch=int(input("Filter By:"))
-        if ch==1:
-            #tables logic
-            print("-"*135)
-            print(f'|{'Reg No':^20} | {'Student Name':^20}| {'Course Name':^20} | {'Total Fees':^20}| {'Paid Fees':^20}| {'Remaining Fees':^20}|')
-            print("-"*135)    
-
-            for reg in student_db:
-                print(f'|{reg:^20} | {student_db[reg]['name']:^20}| {student_db[reg]['course']:^20} | {student_db[reg]['total_fees']:^20}| {student_db[reg]['paid_fees']:^20}| {student_db[reg]['remaining_fees']:^20}|')
-                print("-"*135)
-
-        elif ch==2:
-            pass
-        else:
-            print("Invalid input...")
-
-
-    elif ch==6:
-        print("Thank You ! ")
+    print("\nWELCOME TO Shravani's Academy\n")
+    username = input("UserName: ")
+    password = input("Password: ")
+    if username in users and password == users[username]:
+        print("Login Successful!")
         break
     else:
-        print("Invalid Choice")
+        print("Invalid Credentials. Try Again.\n")
+
+print("Shravani's Academy".center(150, '-'))
+
+# MAIN MENU
+while True:
+    print('''
+    ******** HOME ********
+    1. Add Student Data
+    2. Display Student Data
+    3. Update Student Data
+    4. Delete Student Data
+    5. Filter Student Data
+    6. Admin Login  
+    7. LogOut                                                                 
+    ''')
+
+    try:
+        ch = int(input("Enter your choice: "))
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+        continue
+
+    # 1️⃣ Add Student
+    if ch == 1:
+        name = input("Name: ")
+        courses = list(course_fees.keys())
+
+        print("<= Available Courses => ".center(50))
+        for i, course in enumerate(courses, start=1):
+            print(f"{i}. {course}")
+
+        try:
+            cnum = int(input("Select your Course: "))
+            course = courses[cnum - 1]
+        except (ValueError, IndexError):
+            print("Invalid course selection.")
+            continue
+
+        fees = course_fees[course]
+        print(f"Fees for {course} is ₹{fees}")
+
+        try:
+            dis = float(input("Enter Discount Percentage: "))
+        except ValueError:
+            print("Invalid discount value.")
+            continue
+
+        tfees = fees - fees * dis / 100
+        print(f"Fees after {dis}% discount: ₹{tfees}")
+
+        try:
+            pfees = float(input("Enter Fees to be paid now: "))
+        except ValueError:
+            print("Invalid amount.")
+            continue
+
+        if pfees > tfees:
+            print(f"❌ Amount exceeds total course fees (₹{tfees}). Please pay up to ₹{tfees}.")
+            continue
+
+        rfees = tfees - pfees
+        reg = max(student_db.keys()) + 1
+        student_db[reg] = {'name': name, 'course': course, 'total_fees': tfees, 'paid_fees': pfees, 'remaining_fees': rfees}
+
+        print(f"✅ Data added successfully for {name}!")
+
+    # 2️⃣ Display Student Data
+    elif ch == 2:
+        print("-" * 135)
+        print(f"|{'Reg No':^10}|{'Student Name':^25}|{'Course Name':^25}|{'Total Fees':^15}|{'Paid Fees':^15}|{'Remaining':^15}|")
+        print("-" * 135)
+        for reg, data in student_db.items():
+            print(f"|{reg:^10}|{data['name']:^25}|{data['course']:^25}|{data['total_fees']:^15}|{data['paid_fees']:^15}|{data['remaining_fees']:^15}|")
+        print("-" * 135)
+
+    # 3️⃣ Update Student Data
+    elif ch == 3:
+        try:
+            reg = int(input("Enter registration number: "))
+        except ValueError:
+            print("Invalid registration number.")
+            continue
+
+        if reg not in student_db:
+            print("Registration number not found.")
+            continue
+
+        print('''
+        1. Update Name
+        2. Update Fees
+        3. Change Course
+        ''')
+        try:
+            opt = int(input("Enter your choice: "))
+        except ValueError:
+            print("Invalid input.")
+            continue
+
+        if opt == 1:
+            uname = input("Enter new name: ")
+            student_db[reg]['name'] = uname
+            print("✅ Name updated successfully!")
+
+        elif opt == 2:
+            print(f"Course: {student_db[reg]['course']}")
+            print(f"Total Fees: ₹{student_db[reg]['total_fees']}")
+            print(f"Paid Fees: ₹{student_db[reg]['paid_fees']}")
+            print(f"Remaining Fees: ₹{student_db[reg]['remaining_fees']}")
+
+            try:
+                fees = float(input("Enter additional payment: "))
+            except ValueError:
+                print("Invalid amount.")
+                continue
+
+            if fees <= 0:
+                print("❌ Payment must be positive.")
+            elif fees > student_db[reg]['remaining_fees']:
+                print("❌ Payment exceeds remaining fees.")
+            else:
+                student_db[reg]['paid_fees'] += fees
+                student_db[reg]['remaining_fees'] -= fees
+                print("✅ Payment recorded.")
+                if student_db[reg]['remaining_fees'] == 0:
+                    print("🎉 All fees paid! Thank you!")
+
+        elif opt == 3:
+            print(f"Current Course: {student_db[reg]['course']}")
+            print("Available Courses:")
+            for i, course in enumerate(course_fees.keys(), start=1):
+                print(f"{i}. {course}")
+            try:
+                ch = int(input("Select new course: "))
+                new_course = list(course_fees.keys())[ch - 1]
+            except (ValueError, IndexError):
+                print("Invalid course.")
+                continue
+
+            current_pfees = student_db[reg]['paid_fees']
+            new_tfees = course_fees[new_course]
+            print(f"New Course: {new_course} (₹{new_tfees})")
+
+            if current_pfees >= new_tfees:
+                refund = current_pfees - new_tfees
+                student_db[reg].update({'course': new_course, 'total_fees': new_tfees, 'paid_fees': new_tfees, 'remaining_fees': 0})
+                print(f"✅ Course changed! Refund due: ₹{refund}")
+            else:
+                rfees = new_tfees - current_pfees
+                student_db[reg].update({'course': new_course, 'total_fees': new_tfees, 'remaining_fees': rfees})
+                print(f"✅ Course changed! Remaining Fees: ₹{rfees}")
+        else:
+            print("Invalid option.")
+
+    # 4️⃣ Delete Student
+    elif ch == 4:
+        try:
+            reg = int(input("Enter registration number: "))
+        except ValueError:
+            print("Invalid number.")
+            continue
+
+        if reg in student_db:
+            name = student_db[reg]['name']
+            del student_db[reg]
+            print(f"✅ {name}'s data deleted successfully.")
+        else:
+            print("Registration number not found.")
+
+    # 5️⃣ Filter Students
+    elif ch == 5:
+        print('''
+        1. By Course
+        2. By Pending Fees
+        ''')
+        try:
+            opt = int(input("Filter by: "))
+        except ValueError:
+            print("Invalid input.")
+            continue
+
+        print("-" * 135)
+        print(f"|{'Reg No':^10}|{'Student Name':^25}|{'Course Name':^25}|{'Total Fees':^15}|{'Paid Fees':^15}|{'Remaining':^15}|")
+        print("-" * 135)
+
+        if opt == 1:
+            course_name = input("Enter course name: ")
+            for reg, data in student_db.items():
+                if data['course'] == course_name:
+                    print(f"|{reg:^10}|{data['name']:^25}|{data['course']:^25}|{data['total_fees']:^15}|{data['paid_fees']:^15}|{data['remaining_fees']:^15}|")
+        elif opt == 2:
+            for reg, data in student_db.items():
+                if data['remaining_fees'] > 0:
+                    print(f"|{reg:^10}|{data['name']:^25}|{data['course']:^25}|{data['total_fees']:^15}|{data['paid_fees']:^15}|{data['remaining_fees']:^15}|")
+        else:
+            print("Invalid filter option.")
+        print("-" * 135)
+
+    # 6️⃣ Admin Panel
+    elif ch == 6:
+        password = input("Enter Admin Password: ")
+        if password != users['Admin']:
+            print("❌ Invalid Admin Password.")
+            continue
+
+        print("✅ Admin Login Successful!")
+        while True:
+            print('''
+            ==== ADMIN PANEL ====
+            1. Manage Courses
+            2. Manage Fees
+            3. Manage Users
+            4. Back to Main Menu
+            ''')
+            try:
+                adch = int(input("Enter your choice: "))
+            except ValueError:
+                print("Invalid input.")
+                continue
+
+            if adch == 1:
+                # Manage Courses
+                while True:
+                    print("\nCourse Management".center(50, '-'))
+                    for i, (c, f) in enumerate(course_fees.items(), start=1):
+                        print(f"{i}. {c}: ₹{f}")
+                    print("1. Add Course | 2. Delete Course | 3. Back")
+                    try:
+                        subch = int(input("Enter option: "))
+                    except ValueError:
+                        continue
+                    if subch == 1:
+                        cname = input("Enter new course name: ")
+                        if cname in course_fees:
+                            print("Course already exists.")
+                        else:
+                            try:
+                                fee = float(input("Enter course fee: "))
+                                course_fees[cname] = fee
+                                print(f"✅ Added {cname} (₹{fee})")
+                            except ValueError:
+                                print("Invalid fee amount.")
+                    elif subch == 2:
+                        cname = input("Enter course name to delete: ")
+                        if cname in course_fees:
+                            del course_fees[cname]
+                            print(f"✅ Deleted {cname}")
+                        else:
+                            print("Course not found.")
+                    elif subch == 3:
+                        break
+
+            elif adch == 2:
+                # Manage Fees
+                print("\nManage Fees".center(50, '-'))
+                for i, (c, f) in enumerate(course_fees.items(), start=1):
+                    print(f"{i}. {c}: ₹{f}")
+                try:
+                    cnum = int(input("Select course to update: "))
+                    cname = list(course_fees.keys())[cnum - 1]
+                    new_fee = float(input(f"Enter new fee for {cname}: "))
+                    course_fees[cname] = new_fee
+                    print(f"✅ Fee updated for {cname} (₹{new_fee})")
+                except (ValueError, IndexError):
+                    print("Invalid input.")
+
+            elif adch == 3:
+                # Manage Users
+                while True:
+                    print("\nUser Management".center(50, '-'))
+                    print("1. Add User | 2. Delete User | 3. View Users | 4. Back")
+                    try:
+                        uch = int(input("Enter your choice: "))
+                    except ValueError:
+                        continue
+                    if uch == 1:
+                        uname = input("Enter new username: ")
+                        if uname in users:
+                            print("User already exists.")
+                        else:
+                            upass = input("Enter password: ")
+                            users[uname] = upass
+                            print(f"✅ User '{uname}' added.")
+                    elif uch == 2:
+                        uname = input("Enter username to delete: ")
+                        if uname in users and uname != 'Admin':
+                            del users[uname]
+                            print(f"✅ User '{uname}' deleted.")
+                        else:
+                            print("Cannot delete Admin or non-existing user.")
+                    elif uch == 3:
+                        print("\nCurrent Users:")
+                        for u in users.keys():
+                            print("-", u)
+                    elif uch == 4:
+                        break
+
+            elif adch==4:
+                #back to main menu
+                break
+    # 7️⃣ Logout
+    elif ch == 7:
+        print("Logging Out... Thank You!")
+        break
+
+    else:
+        print("Invalid Choice.")
